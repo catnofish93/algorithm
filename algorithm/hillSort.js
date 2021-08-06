@@ -24,3 +24,4 @@ function hillSort(arr) {
 }
 const arr = [1,9,4,2,4,6,1,51]
 console.log(hillSort(arr))
+
