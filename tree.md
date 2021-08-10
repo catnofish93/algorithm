@@ -188,4 +188,37 @@ B+树的改进之处，中间结点不在包含卫星数据，每个磁盘页可
 #### 16、移除结点值
     // 找到需要移除的结点，判断该结点是否有子结点，如果没有，则直接删除
     // 如果有一个叶子结点，则用该结点替换当前位置，如果有两个子结点，则用右子树中最小的结点替换当前结点
-    
+    // 移除指定值的点
+    remove(value) {
+        this.removeNode(this.root, value)
+    }
+    removeNode(node, value) {
+        if (node === null) {
+            return node
+        }
+        if (node.value > value) {
+            node.left = this.removeNode(node.left, value)
+            return node
+        } else if (node.value < value) {
+            node.right = this.removeNode(node.right, value)
+            return node
+        } else {
+            if (node.left === null && node.right === null) {
+                node = null
+                return node
+            }
+            if (node.left === null) {
+                node = node.right
+                return node
+            } else if (node.right === null) {
+                node = node.left
+                return node
+            }
+            let auth = this.findMinNode(node.right)
+            node.value = auth.value
+            node.right = this.removeNode(node.right, auth)
+            return node
+        }
+    }
+#### 17、求解两个结点最近的公共祖先结点
+
