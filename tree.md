@@ -221,4 +221,19 @@ B+树的改进之处，中间结点不在包含卫星数据，每个磁盘页可
         }
     }
 #### 17、求解两个结点最近的公共祖先结点
+二叉查找树，由根结点开始遍历，如果根结点大于两个结点的值，则遍历左子树，不然遍历右子树，当找到当前结点的值，比其中一个结点打，比另一结点小时，则为最近的公共祖先结点
+#### 18、反转单向链表
+    var reverseList = function(head) {
+        if (!head || !head.next) return head
+        let pre = null
+        let current = head
+        let next
+        while(current) {
+            next = current.next
+            current.next = pre
+            pre = current
+            current = next
+        }
+        return pre
+    }
 
