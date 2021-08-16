@@ -29,6 +29,10 @@ js引擎，解析和执行javascript来实现网页的动态效果
 #### 8、DOMContentLoaded事件与Load事件区别
 当HTMl文档被完全加载和解析时，DOMContentLoad事件被触发，而无需等待样式表，图像和子框架加载完成<br>
 Load事件是当所有的资源加载完成后触发<br>
+#### 9、cookies,localStorage,sessionStorage
+存储大小：cookie存储大小不超过4K,sessionStorage和localStorage要大的多，可以达到5M<br>
+有效时间：localStorage除非主动删除，sessionStorage会话结束后被清除，cookies设置有效时间<br>
+作用域：sessionStorage通源窗口，当前会话，localStorage通源窗口，cookies通源窗口
 
 
 
