@@ -83,5 +83,25 @@
     }
 #### 依赖到底是谁
     export default class Watcher {
-        
-}
+        constructor(vm, expOrFn, cb) {
+            this.vm = vm
+            this.cb = cb
+            this.getter = parsePath(expOrFn)
+            this.value = this.get()
+        }
+        get() {
+            // 将watcher设置为window.target全局变量
+            window.target = this
+            const vm = this.vm
+            // 调用getter方法，将watcher添加到Dep中
+            let value = this.getter.call(vm, vm)
+            window.target = null
+            return value
+        }
+        // 更新数据更新变化的回调方法
+        update() {
+            const oldValue = this.value
+            this.value = this.get()
+            this.cb.call(this.vm, this.value, this.oldValue)
+        }
+    }
