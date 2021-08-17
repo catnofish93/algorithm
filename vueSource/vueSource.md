@@ -105,3 +105,45 @@
             this.cb.call(this.vm, this.value, this.oldValue)
         }
     }
+#### 2、虚拟DOM
+##### 什么是虚拟DOM
+虚拟DOM是用一个js对象描述DOM结点
+##### 虚拟DOM类
+    
+    export default class Vnode {
+        constructor(
+            tag?: string,
+            data?: vNodeData,
+            children: ?Array<Vnode>,
+            text?: string,
+            elm?: Node,
+            context?: Component,
+            componentOptions?: VnodeComponentOptions,
+            asyncFactory?: Function
+        ) {
+            }
+    }
+##### 虚拟DOM的类型
+<ul>
+    <li>注释结点</li>
+    <li>文本结点</li>
+    <li>元素结点</li>
+    <li>组件结点</li>
+    <li>函数式组件结点</li>
+    <li>克隆结点</li>
+</ul>
+注释结点<br>
+
+    export const createEmptyVnode = (text: string= '') => {
+        const node = new VNode()
+        node.text = text
+        node.isComment = true
+        return node
+    }
+文本结点<br>
+
+    export const creatTextVnode(val: string | number) {
+        return new VNode(undefined, undefined, undefined, String(val))    
+    }
+#### VNode的作用
+当数据发生变化需要更新时，将数据变化后的VNode与数据变化前的VNode对比，找出差异，将有差异的VNode转化为真实DOM,并更新到视图中<br>
