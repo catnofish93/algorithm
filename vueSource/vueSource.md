@@ -147,3 +147,62 @@
     }
 #### VNode的作用
 当数据发生变化需要更新时，将数据变化后的VNode与数据变化前的VNode对比，找出差异，将有差异的VNode转化为真实DOM,并更新到视图中<br>
+#### patch
+DOM-Diff过程叫做patch过程<br>
+patch干的3件事:<br>
+- 创建结点，新的VNode中有，而旧的VNode中没有，则在旧的VNode中创建
+- 删除结点，新的VNode中没有，而旧的VNode中有，则在旧的VNode中删除
+- 更新结点，新的VNode中有，旧的VNode中有，则以新的VNode为准，更新旧的VNode
+创建结点<br>
+  
+
+    function createEle(vnode, parentElm, refElm) {
+        const data = vnode.data
+        const children = vnode.children
+        const tag = vnode.tag
+        if (isDef(tag)) {
+            // 创建元素结点
+            vnode.elm = nodeOps.createElement(tag, vnode)
+            // 创建元素子结点
+            createChildren(vnode, children, insertedVnodeQueue)
+            // 插入DOM
+            insert(parentElm, vnode.elm, refElm)
+        } else if (isTure(vnode.isComment)) {
+            vnode.elm = nodeOps.createComment(vnode.text)
+            insert(parentElm, vnode.elm, refElm)
+        } else {
+            vnode.elm = nodeOps.createTextNode(vnode.text)
+            insert(parentElm, vnode.elm, refElm)
+        }
+    }
+
+删除结点
+
+    function removeNode(el) {
+        const parent = nodeOps.parentNode(el)
+        if (isDef(parent)) {
+            // 调用父结点的removeChild方法
+            nodeOps.removeChild(parent, el)
+        }
+    }
+
+更新结点
+
+如果VNode与oldVNode均为静态结点，直接跳过<br>
+如果VNode为文本结点，看oldVNode是是否只包含文本，如果是，比较文本是否相同，不同则更换文本，oldVNode不是文本结点，使用setTextNode改成文本结点<br>
+如果VNode为元素结点，分两种情况
+- 该结点包含子结点，则看旧结点是否包含子结点，如果包含，则递归替换，如果不包含，则旧结点可能为空结点或文本结点，原有结点删除，插入新的结点
+- 该结点不包含子结点，将结点清空，插入新结点
+
+#### 模版编译
+把<template></template>中的内容，通过一系列逻辑处理生成渲染函数，也就是render函数，这一过程称为模版编译过程
+
+```mermaid
+graph LR
+A(用户写的模版) --> B(模版编译)
+B-->C(render函数)
+C-->D(VNode)
+D-->E(patch函数)
+E-->F(视图)
+
+
