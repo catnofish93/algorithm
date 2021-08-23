@@ -195,14 +195,28 @@ patch干的3件事:<br>
 - 该结点不包含子结点，将结点清空，插入新结点
 
 #### 模版编译
-把<template></template>中的内容，通过一系列逻辑处理生成渲染函数，也就是render函数，这一过程称为模版编译过程
+把<template></template>中的内容，通过一系列逻辑处理生成渲染函数，也就是render函数，这一过程称为模版编译过程<br>
+包含三个过程：解析器-》优化器-》代码生成器
 
-```mermaid
-graph LR
-A(用户写的模版) --> B(模版编译)
-B-->C(render函数)
-C-->D(VNode)
-D-->E(patch函数)
-E-->F(视图)
+#### 解析器
+把模版通过正则等方式解析成抽象语法树，解析器的主函数为parseHTML,辅助函数为parseText,parseFilters
 
+    // convert HTML to AST
+    export function parse(template, options) {
+        parseHTML(template, {
+            warn,
+            expectHTML: options,expectHTML,
+            isUnaryTag: options.inUnaryTag,
+            start(tag, attrs, unary) {}
+            end() {}
+            chars(text: string) {}
+            comment(text: string) {}
+        })
+        return root
+    }
+
+#### 优化阶段
+在AST中找出所有的静态结点并打上标记<br>
+在AST中找出所有的静态根结点并打上标记<br>
+在patch过程中不要比较这类结点，可以进行性能提升
 
