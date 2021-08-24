@@ -244,5 +244,6 @@ vue会根据模版生成一个render函数供组件挂载时调用
         }
     }
     // 获取ast对应vnode对象
+    // 创建出来的结点无非有3种，分别为元素结点、文本结点、注释结点
     export function getElement(ast)
 
