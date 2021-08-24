@@ -220,3 +220,29 @@ patch干的3件事:<br>
 在AST中找出所有的静态根结点并打上标记<br>
 在patch过程中不要比较这类结点，可以进行性能提升
 
+    export function optimize(root: ?ASTElement, options: CompilerOptions) {
+        if (!root) return
+        isStatickey = getStaticKeysCached(options.staticKeys || '')
+        isPlatformReservedTag = options.isReservedTag|| no
+        // 标记静态结点
+        markStatic(root)
+        // 标记静态根结点
+        markStaticRoots(root, false)
+    }
+
+#### 生成代码阶段
+生成render函数字符串，当用户手写render函数时，vue在挂载组件时会调用这个render函数，如果用户没有手写,
+vue会根据模版生成一个render函数供组件挂载时调用
+
+    // 生成render函数
+    export function generate(ast, option) {
+        const state = new CodegenState(option)
+        const code = ast ? genElement(ast) : '_c("div")'
+        return {
+            render: `with(this){ return $(code)}`,
+            staticRenderFns: state.staticRenderFns
+        }
+    }
+    // 获取ast对应vnode对象
+    export function getElement(ast)
+
