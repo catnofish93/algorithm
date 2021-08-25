@@ -245,5 +245,64 @@ vue会根据模版生成一个render函数供组件挂载时调用
     }
     // 获取ast对应vnode对象
     // 创建出来的结点无非有3种，分别为元素结点、文本结点、注释结点
-    export function getElement(ast)
+    export function getElement(ast: ASTElement, state: CodegenState):string {
+        if (el.staticeRoot && !el.staticProcessed) {
+            return getStatic(el, state)
+        } else if (el.once && !el.onceProcessed) {
+            return getOnce(el, state)
+        } else if (el.for && !el.forProcessed) {
+            return getFor(el, state)
+        } else if (el.if && !el.ifProcessed) {
+            return getIf(el, state)
+        } else if (el.tag === 'template' && !el.slotTarget) {
+            return getChildren(el, state) || 'void 0'
+        } else if (el.tag === 'slot') {
+            return getSlot(el, state)
+        } else {
+            let code
+            if (el.component) {
+                code = getComponent(el.component, el, state)
+            } else {
+                const data = el.plain ? undefined : getData(el, state)
+                const children = el.inlineTemplate ? null : getChildren(el, state, true)
+                code = `_c('${el.tag}'${data? `,${data}`:''}${children ? `,${children}`:''})
+            }
+            for (let i = 0; i < state.transforms.length; i++) {
+                code = state.transforms[i](el, code)
+            }
+            return code
+        }
+    }
+
+#### 生命周期篇
+- 初始化阶段，为vue实例初始化一些属性，事件以及响应数据
+- 模版编译函数，将模版编译成函数
+- 挂载阶段，将实例挂载在指定的DOM上
+- 销毁阶段，将实例自身从父组件删除，并取消依赖追踪及事件监听器
+
+#### 初始化阶段
+初始化阶段分为两部，第一步是创建Vue实例，第二步是初始化一些事件
+
+    export function initMixin(Vue) {
+        Vue.protptype._init = function(options) {
+            const vm = this
+            vm.$options = mergeOptions(
+                resolveConstructorOptions(vm.constructor),
+                options || {},
+                vm
+            )
+            vm._self = vm
+            initLifecycle(vm)
+            initEvents(vm)
+            initRender(vm)
+            callHook(vm, 'beforeCreate')
+            initInjections(vm)
+            initState(vm)
+            initProvide(vm)
+            callHook(vm, 'created')
+            if (vm.$options.el) {
+                vm.$mount(vm.$options.el)
+            }
+        }
+    }
 
