@@ -33,6 +33,53 @@ Load事件是当所有的资源加载完成后触发<br>
 存储大小：cookie存储大小不超过4K,sessionStorage和localStorage要大的多，可以达到5M<br>
 有效时间：localStorage除非主动删除，sessionStorage会话结束后被清除，cookies设置有效时间<br>
 作用域：sessionStorage通源窗口，当前会话，localStorage通源窗口，cookies通源窗口
+#### 10、css如何阻止文档解析
+如果浏览器还没有完成CSSOM的下载和构建，浏览器将会延迟脚本的执行和文档的解析，直至其完成CSSOM的下载和构建
+#### 11、渲染页面常见哪些不良的现象
+FOUC: 样式的闪烁问题，主要原因是css加载时间过长，或者css被放在文档的底部<br>
+白屏：浏览器的渲染机制为先构建DOM和CSSOM,再进行渲染，如果css未加载，浏览器迟迟未渲染，也可能js放在文档头部，脚本的加载会阻塞后面文档的渲染，出现白屏现象
+#### 12、浏览器架构
+用户界面<br>
+*主进程<br>
+*内核<br>
+**渲染引擎<br>
+**JS引擎<br>
+***执行栈<br>
+**事件触发线程<br>
+***消息队列<br>
+****微任务<br>
+****宏任务<br>
+***网络异步线程<br>
+***定时器线程<br>
+#### 13、css.reset与normalize.css有什么区别
+reset的目的，是将所有的的浏览器自带样式重置掉，这样更容易保持各浏览器渲染的一致性<br>
+normalize: 尽量保持浏览器的默认样式，不进行太多的重置，而尽力让这些样式一致并尽可能与现代标准相符合<br>
+#### 14、主浏览器内核私有属性CSS前缀
+mozilla内核（firefox,flock等）-moz<br>
+webkit内核 （safari,chrome等）-webkit<br>
+opera内核 （opera浏览器） -o<br>
+trient内核 （ie浏览器）-ms<br>
+#### 15、前端性能优化
+内容方面
+
+- 通过文件合并、css雪碧图、base64等减少http的请求次数
+- 使用DNS缓存，减少DNS的查询次数
+- 通过设置缓存策略，对常用不变的资源进行缓存
+- 使用延迟加载，减少首屏加载时需要请求的资源
+- 通过用户行为，对某些资源使用预加载
+
+服务器方面
+
+- 使用CDN服务
+- 服务器端使用GZip,Deflate等方式对传输的资源进行压缩
+- 尽可能减少cookie的大小，并且通过将静态资源分配到对应的域名下，
+
+css和javascript方面
+
+- 将样式表放在head标签中，减少首次渲染时间
+- 避免使用@import标签
+- 尽量把js脚本放在文档底部，或使用defer、async属性，避免脚本的加载和执行阻止页面的渲染，
+- 通过对javascript和css文件进行压缩，减少文件的体积
 
 
 
