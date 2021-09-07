@@ -241,5 +241,84 @@ React Router主要包含的几个包
 - 动态路由的方式
 - search传递参数
 - to传入对象
-  
 
+#### react-redux
+react-redux将组件分成两部分
+- 容器组件，存在逻辑处理
+- UI组件，只负责显示和交互，内部没有逻辑处理，状态由外部控制
+
+react-redux包含两个核心
+- Provider
+- connection
+
+
+    <Provider store={store}>
+        <App />
+    </Provider>
+    connect(mapStateToProps, mapDispatchToProps)(MyComponent)
+
+#### react-redux中间件
+其本质是一个函数，对store.dispatch方法进行了改造，在发出Action和执行Reducer这两步中间，添加了新的功能
+
+使用
+
+    const store = createstore(
+        reducer,
+        applyMiddleware(thunk, logger)
+    )
+
+redux-thunk会判断传入的数据类型，如果是一个函数，将给函数传入参数值(dispatch, getState)
+
+    const getHomeMultidataAction = () => {
+        return (dispatch) => {
+            axios.get("http://xxx.xx.xx").then(res => {
+                const data = res.data.data;
+                dispatch(changeBannersAction(data.banner.list))
+            }
+        }
+    }
+
+    import { applyMiddleware, createStore } from 'redux'
+    import createLogger from 'redux-logger'
+    const logger = createLogger()
+    
+    const store = createStore(
+        reducer,
+        applyMiddleware(logger)
+    )
+
+三大原则
+- 单一数据源
+- state是只读的
+- 使用纯函数来执行修改
+
+#### react中常用引用css的方式
+- 在组件中直接使用
+- 组件中引用css文件, 全局生效，互相影响
+- 组件中引用.module.css文件吗， 类名需要用{style.className}的形式编写，不方便动态修改样式
+- CSS IN JS，由第三方库提供，styled-components
+
+#### react hooks
+hook让函数组件拥有了类组件的特性，例如组件内的状态，生命周期
+
+    import React, { useState, userEffect } from 'react'
+    function Example() {
+        const [ count, setCount ] = useState(0)
+        useEffect(() => {
+            document.title = `you click ${count} times`;
+        })
+        return (
+            <div>
+                <p>You clicked {count} times</p>
+                <button onClick={() => setCount(count + 1)}>click me</button>
+            </div>
+        )
+
+常用hook
+- useState
+- useEffect
+- 其他
+
+hook能解决状态相关的重用问题
+- 每调用一次useHook一次都会生成一份独立的状态
+- 通过自定一hook，能更好的封装我们的功能
