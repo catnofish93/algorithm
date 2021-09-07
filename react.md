@@ -161,5 +161,85 @@ React基于浏览器事件机制自身的一套事件机制，包括事件注册
 - 不要在render方法中使用高阶组件
 - 使用compose组合高阶组件
 - 包装显示名字以方便调试
+
+#### React服务端渲染
+指服务端完成html的拼接处理技术，发送给浏览器端，然后为其绑定状态和事件，主要解决了两个问题
+- 加速首屏加载，解决首屏白屏问题
+- SEO，渲染的页面可直接由爬虫抓取
+
+#### React中捕获错误
+错误边界
+
+    class ErrorBoundary extends React.Component {
+        constructor(props){
+            super(props)
+            this.state = { hasError: false };
+        }
+        static getDerivedStateFromError(error) {
+            return { hasError: true }
+        }
+        componentDidCatch(error, errorInfo) {
+            logErrorToMyService(error, errorInfo)
+        }
+        render() {
+            if (this.state.hasError) {
+                return (<h1>Something has wrong</h1>)
+            }
+            return this.props.children
+        }
+    }
+
+错误边界无法捕捉到的错误，可以通过try catch和onerror事件监听捕获
+
+#### React常用的优化手段
+- 避免使用内联函数
+- 使用React Fragments避免额外标记
+- 使用immutable
+- 懒加载组件
+- 事件绑定方式
+- 服务端渲染
+
+#### 如何避免不必要的render
+- shouldComponentUpdate,在生命周期中进行数据对比，如果不希望组件重新渲染，返回false即可
+- PureComponent,与shouldComponentUpdate原理一致，是对数据进行浅比较
+- React.memo用来缓存组件的渲染，避免不必要的更新，是一个高阶组件
+
+#### render函数的触发时机
+- 类组件调用setState修改状态
+- 函数组件通过useState hook修改状态
+- 类组件重新渲染
+- 函数组件重新渲染
+
+#### immutable
+immutable的实现原理是持久化数据结构
+- 用一种数据结构来保存数据
+- 当数据被修改时，返回一个对象，新对象会尽可能的利用之前的数据结构，而不会对内存造成浪费
+
+使用immutable的库主要是immutable.js
+
+#### React Router的几种模式
+hasRouter: 通过监听window.addEventListener('hashChange', callback)监听hash值的变化，并传递给
+其嵌套的组件<br>
+browerRouter:利用history.location值的变化，通过props传进来的path与context传进来的pathName进行匹配，然后决定是否渲染组件
+
+使用immutable可以给react带来性能上的优化，主要体现在减少渲染次数上
+
+React Router主要包含的几个包
+- react-router 实现了路由的核心功能
+- react-router-dom 基于react-router，实现了浏览器运行环境的一些功能
+- react-router-native 基于react-router,加入了react-native的一些功能
+- react-router-config 用于配置静态路由的工具库
+
+提供的组件
+- BrowerRouter, HashRouter
+- Route
+- Link, NavLink
+- switch
+- redirect
+
+路由传递参数的方式
+- 动态路由的方式
+- search传递参数
+- to传入对象
   
 
