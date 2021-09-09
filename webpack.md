@@ -93,6 +93,17 @@ TreeShaking有两种方案
 - 使用cache-loader， 性能开销较大的loader是哟个cache-loader，缓存到磁盘中
 - terser启动多线程
 - 合理使用sourceMap，打包信息越详细，打包速度越慢
+
+#### webpack与gulp的区别
+gulp
+- 构建工具
+- 提高效率用
+- 自动化
+
+webpack
+- 打包工具
+- 模块化
+- 编译模块代码方案
         
     
 
