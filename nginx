@@ -1,4 +1,5 @@
 1、基本命令
+start nginx
 nginx -s stop
 nginx -s start
 2、基本配置
