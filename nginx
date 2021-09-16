@@ -1,1 +1,28 @@
-
+1、基本命令
+nginx -s stop
+nginx -s start
+2、基本配置
+server {
+  listen
+  server_name
+  index
+  root
+  charset
+  proxy_connect_timeout
+  proxy_send_timeout
+  proxy_read_timeout
+  location
+  ssl_certificate
+  ssl_certificate_key
+}
+3、负载均衡
+upStream load_balance_server {
+  server: 192.168.0.1:80 weight= 5
+}
+4、部署多个weapp
+upStream product_server{
+  server: www.helloworld
+}
+upStream admin_server{
+  server: www.helloworld1
+}
